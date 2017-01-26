@@ -2,13 +2,13 @@
 <html lang="en-us">
   <head>
     <meta charset="UTF-8">
-    <title>greg's blog</title>
+    <title>Greg's blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#157878">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="/assets/css/style.css?v=43005e6efe6c8a264ae34262f6372afbbfe00d6f">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
     <script type="text/javascript"
-      src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
     </script>
 </head>
   <body>
@@ -16,101 +16,33 @@
       <h1 class="project-name">Greg's blog</h1>
       <h2 class="project-tagline">A few things on programming, music, games, and my life</h2>
       
-        <a href="http://github.com/05gash/05gash.github.io" class="btn">View on GitHub</a>
-      
       
     </section>
 
     <section class="main-content">
-      <h1 id="header-1nested-brackets"><a href="#header-1"></a>Nested Brackets</h1>
+      
 
-<p>It’s the final year of my degree, so I’m doing a few job interviews at the moment. And I’ve run in to the following problem a few times:</p>
+      
+      <ul>
+        
+          <li>
+            <a href="/2017/01/26/Grantk.html">Grant Kirkhope ft. Rimsky-Korsakov</a>
+            <p>Youtube autoplayed Scheherazade by Rimsky-Korsakov the other day - I hadn’t listened to it all the way through before, but I’d heard the opening a few times. <a href="https://www.youtube.com/watch?v=SQNymNaTr-Y&amp;feature=youtu.be&amp;t=22m5s">This motif</a> (played by the clarinet) caught my attention though.</p>
 
-<blockquote>
-  <p>Given an input string <script type="math/tex">\alpha</script></p>
 
-  <p>Determine if <script type="math/tex">\alpha</script> can be generated in the grammar:</p>
+          </li>
+        
+          <li>
+            <a href="/2017/01/24/Nested-Brackets.html">Nested Brackets</a>
+            <p>It’s the final year of my degree, so I’m doing a few job interviews at the moment. And I’ve run in to the following problem a few times:</p>
 
-  <p>S <script type="math/tex">\rightarrow \epsilon</script></p>
 
-  <p>S <script type="math/tex">\rightarrow</script> {S} S</p>
-
-  <p>S <script type="math/tex">\rightarrow</script> [S] S</p>
-
-  <p>S <script type="math/tex">\rightarrow</script> (S) S</p>
-</blockquote>
-
-<p>In other words, we want to recognise any sequence of brackets that might be used to represent a branching structure like a tree.</p>
-
-<p>So we know that strings like <code class="highlighter-rouge"><span class="p">{}</span><span class="err">()</span><span class="p">[]</span></code> and <code class="highlighter-rouge">([])[({})]</code> are valid. <br />
-But strings like <code class="highlighter-rouge"><span class="p">{</span><span class="err">]</span></code> and <code class="highlighter-rouge"><span class="p">{</span><span class="err">(</span><span class="p">}</span><span class="err">)</span></code> are invalid.</p>
-
-<p>How do we recognise these valid strings? <br />
-If you look up this question in Google, the <a href="http://www.ardendertat.com/2011/11/08/programming-interview-questions-14-check-balanced-parentheses">solutions you’ll find</a> will (almost) all use a <strong>stack</strong> to record the last seen opening bracket as we scan from left to right along the string.</p>
-
-<p>Now that makes sense, given that the above is a <a href="https://en.wikipedia.org/wiki/Context-free_grammar">context free grammar</a>, which can be recognised with a push-down automaton.
-Push-down automata are like their less powerful cousins <a href="https://en.wikipedia.org/wiki/Finite-state_machine">finite-state automata</a>, but crucially they can employ a <strong>stack</strong> to push and pop from.</p>
-
-<p>But with modern programming languages, we’re provided with so many string processing tools for free that we don’t need to explicitly allocate a stack, at least not for the purposes of our problem.</p>
-
-<h1 id="header-3towards-a-more-elegant-solution"><a href="#header-3"></a>Towards a more elegant solution</h1>
-
-<p>What if, instead, we looked at our string and removed the sequences <code class="highlighter-rouge"><span class="p">{}</span></code>, <code class="highlighter-rouge">[]</code>, and <code class="highlighter-rouge">()</code> until the string is empty or no more can be removed?</p>
-
-<p>So, after one pass this valid string: <code class="highlighter-rouge">([])[({})]</code> <br />
-will be transformed to: <code class="highlighter-rouge"><span class="p">{}</span><span class="err">()</span><span class="p">[</span><span class="err">()</span><span class="p">]</span></code> <br />
-and after another pass: <code class="highlighter-rouge">()</code> <br />
-until after one last pass we’re left with the empty string <script type="math/tex">\epsilon</script>.</p>
-
-<p>But applying the same process to the invalid string: <code class="highlighter-rouge"><span class="p">{</span><span class="err">(</span><span class="p">}</span><span class="err">)</span></code> will yield the same string again.</p>
-
-<p>You can think of the above as repeatedly removing the leaves of a tree represented by our string, after each pass, our tree gets smaller until it can shrink no more: in which case it’s empty - or it’s not a tree :(</p>
-
-<p>So in python, our method might look like this:</p>
-
-<div class="language-python highlighter-rouge"><pre class="highlight"><code>	<span class="k">def</span> <span class="nf">brackets</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-		<span class="n">brackets</span> <span class="o">=</span> <span class="p">[</span><span class="s">"{}"</span><span class="p">,</span> <span class="s">"()"</span><span class="p">,</span> <span class="s">"[]"</span><span class="p">]</span>
-		<span class="n">oldString</span> <span class="o">=</span> <span class="n">s</span>
-		<span class="k">for</span> <span class="n">br</span> <span class="ow">in</span> <span class="n">brackets</span><span class="p">:</span>
-			<span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">br</span><span class="p">,</span> <span class="s">""</span><span class="p">)</span>
-	     
-		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-			<span class="k">return</span> <span class="bp">True</span>
-		<span class="k">else</span><span class="p">:</span>
-			<span class="k">if</span> <span class="n">oldString</span> <span class="o">==</span> <span class="n">s</span><span class="p">:</span>
-				<span class="k">return</span> <span class="bp">False</span>
-			<span class="k">else</span><span class="p">:</span>
-				<span class="k">return</span> <span class="n">brackets</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-</code></pre>
-</div>
-
-<p>Now this recursive solution is OK, but now we’re using another stack implicitly: the call stack. ugh.</p>
-
-<p>We actually don’t need this recursive feature if we update some bits of state ourselves:</p>
-
-<div class="language-python highlighter-rouge"><pre class="highlight"><code>	<span class="k">def</span> <span class="nf">bracketsIter</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-		<span class="n">brackets</span> <span class="o">=</span> <span class="p">[</span><span class="s">"{}"</span><span class="p">,</span> <span class="s">"()"</span><span class="p">,</span> <span class="s">"[]"</span><span class="p">]</span>
-		<span class="n">oldString</span> <span class="o">=</span> <span class="s">""</span>
-		<span class="k">while</span><span class="p">(</span><span class="n">oldString</span> <span class="o">!=</span> <span class="n">s</span><span class="p">):</span>
-			<span class="n">oldString</span> <span class="o">=</span> <span class="n">s</span>
-			<span class="k">for</span> <span class="n">br</span> <span class="ow">in</span> <span class="n">brackets</span><span class="p">:</span>
-				<span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">br</span><span class="p">,</span> <span class="s">""</span><span class="p">)</span>
-	     
-			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-				<span class="k">return</span> <span class="bp">True</span>
-		<span class="k">return</span> <span class="bp">False</span>
-</code></pre>
-</div>
-
-<p>So this new iterative approach will terminate, returning <code class="highlighter-rouge">False</code>, if our string can’t be reduced further. Or returning <code class="highlighter-rouge">True</code> if our string is ever empty.</p>
-
-<p>Now this algorithm has a worse asymptotic time complexity than the standard approach with a stack. <br />
-But it can run in place on the string, whereas the method with a stack required O(n) space.</p>
-
+          </li>
+        
+      </ul>
+      
 
       <footer class="site-footer">
-        
-          <span class="site-footer-owner"><a href="http://github.com/05gash/05gash.github.io">05gash.github.io</a> is maintained by <a href="http://github.com/05gash">05gash</a>.</span>
         
         <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
       </footer>

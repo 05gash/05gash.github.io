@@ -26,6 +26,16 @@
 
     <section class="main-content">
       {{ content }}
+      {% if page.title != "" %}
+      <ul>
+        {% for post in site.posts %}
+          <li>
+            <a href="{{ post.url }}">{{ post.title }}</a>
+            {{ post.excerpt }}
+          </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
 
       <footer class="site-footer">
         {% if site.github.is_project_page %}

@@ -1,13 +1,86 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-01-26T18:15:23+00:00</updated><id>http://localhost:4000//</id><title type="html">Greg’s blog</title><subtitle>A few things on programming, music, games, and my life</subtitle><entry><title type="html">Welcome to Jekyll!</title><link href="http://localhost:4000/2017/01/20/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2017-01-20T17:34:25+00:00</published><updated>2017-01-20T17:34:25+00:00</updated><id>http://localhost:4000/2017/01/20/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/2017/01/20/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://localhost:4000/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2017-01-26T19:33:21+00:00</updated><id>http://localhost:4000//</id><title type="html">Greg’s blog</title><subtitle>A few things on programming, music, games, and my life</subtitle><entry><title type="html">Grant Kirkhope ft. Rimsky-Korsakov</title><link href="http://localhost:4000/2017/01/26/Grantk.html" rel="alternate" type="text/html" title="Grant Kirkhope ft. Rimsky-Korsakov" /><published>2017-01-26T17:34:25+00:00</published><updated>2017-01-26T17:34:25+00:00</updated><id>http://localhost:4000/2017/01/26/Grantk</id><content type="html" xml:base="http://localhost:4000/2017/01/26/Grantk.html">&lt;p&gt;Youtube autoplayed Scheherazade by Rimsky-Korsakov the other day - I hadn’t listened to it all the way through before, but I’d heard the opening a few times. &lt;a href=&quot;https://www.youtube.com/watch?v=SQNymNaTr-Y&amp;amp;feature=youtu.be&amp;amp;t=22m5s&quot;&gt;This motif&lt;/a&gt; (played by the clarinet) caught my attention though.&lt;/p&gt;
 
-&lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+&lt;p&gt;You hear it scattered throughout the &lt;a href=&quot;https://youtu.be/oP_BQd0wivc?t=1h26m55s&quot;&gt;Angry Aztec level&lt;/a&gt; in Donkey Kong 64.&lt;/p&gt;
 
-&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+&lt;p&gt;Pretty neat to tune in on the influences of composers. It’s also pretty neat if this happened by chance too.&lt;/p&gt;</content><summary type="html">Youtube autoplayed Scheherazade by Rimsky-Korsakov the other day - I hadn’t listened to it all the way through before, but I’d heard the opening a few times. This motif (played by the clarinet) caught my attention though.</summary></entry><entry><title type="html">Nested Brackets</title><link href="http://localhost:4000/2017/01/24/Nested-Brackets.html" rel="alternate" type="text/html" title="Nested Brackets" /><published>2017-01-24T17:34:25+00:00</published><updated>2017-01-24T17:34:25+00:00</updated><id>http://localhost:4000/2017/01/24/Nested%20Brackets</id><content type="html" xml:base="http://localhost:4000/2017/01/24/Nested-Brackets.html">&lt;p&gt;It’s the final year of my degree, so I’m doing a few job interviews at the moment. And I’ve run in to the following problem a few times:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Tom'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints 'Hi, Tom' to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;Given an input string &lt;script type=&quot;math/tex&quot;&gt;\alpha&lt;/script&gt;&lt;/p&gt;
 
-&lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;</content><summary type="html">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</summary></entry></feed>
+  &lt;p&gt;Determine if &lt;script type=&quot;math/tex&quot;&gt;\alpha&lt;/script&gt; can be generated in the grammar:&lt;/p&gt;
+
+  &lt;p&gt;S &lt;script type=&quot;math/tex&quot;&gt;\rightarrow \epsilon&lt;/script&gt;&lt;/p&gt;
+
+  &lt;p&gt;S &lt;script type=&quot;math/tex&quot;&gt;\rightarrow&lt;/script&gt; {S} S&lt;/p&gt;
+
+  &lt;p&gt;S &lt;script type=&quot;math/tex&quot;&gt;\rightarrow&lt;/script&gt; [S] S&lt;/p&gt;
+
+  &lt;p&gt;S &lt;script type=&quot;math/tex&quot;&gt;\rightarrow&lt;/script&gt; (S) S&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;In other words, we want to recognise any sequence of brackets that might be used to represent a branching structure like a tree.&lt;/p&gt;
+
+&lt;p&gt;So we know that strings like &lt;code class=&quot;highlighter-rouge&quot;&gt;&lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;([])[({})]&lt;/code&gt; are valid. &lt;br /&gt;
+But strings like &lt;code class=&quot;highlighter-rouge&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;]&lt;/span&gt;&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;)&lt;/span&gt;&lt;/code&gt; are invalid.&lt;/p&gt;
+
+&lt;p&gt;How do we recognise these valid strings? &lt;br /&gt;
+If you look up this question in Google, the &lt;a href=&quot;http://www.ardendertat.com/2011/11/08/programming-interview-questions-14-check-balanced-parentheses&quot;&gt;solutions you’ll find&lt;/a&gt; will (almost) all use a &lt;strong&gt;stack&lt;/strong&gt; to record the last seen opening bracket as we scan from left to right along the string.&lt;/p&gt;
+
+&lt;p&gt;Now that makes sense, given that the above is a &lt;a href=&quot;https://en.wikipedia.org/wiki/Context-free_grammar&quot;&gt;context free grammar&lt;/a&gt;, which can be recognised with a push-down automaton.
+Push-down automata are like their less powerful cousins &lt;a href=&quot;https://en.wikipedia.org/wiki/Finite-state_machine&quot;&gt;finite-state automata&lt;/a&gt;, but crucially they can employ a &lt;strong&gt;stack&lt;/strong&gt; to push and pop from.&lt;/p&gt;
+
+&lt;p&gt;But with modern programming languages, we’re provided with so many string processing tools for free that we don’t need to explicitly allocate a stack, at least not for the purposes of our problem.&lt;/p&gt;
+
+&lt;h1 id=&quot;header-3towards-a-more-elegant-solution&quot;&gt;&lt;a href=&quot;#header-3&quot;&gt;&lt;/a&gt;Towards a more elegant solution&lt;/h1&gt;
+
+&lt;p&gt;What if, instead, we looked at our string and removed the sequences &lt;code class=&quot;highlighter-rouge&quot;&gt;&lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;[]&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;()&lt;/code&gt; until the string is empty or no more can be removed?&lt;/p&gt;
+
+&lt;p&gt;So, after one pass this valid string: &lt;code class=&quot;highlighter-rouge&quot;&gt;([])[({})]&lt;/code&gt; &lt;br /&gt;
+will be transformed to: &lt;code class=&quot;highlighter-rouge&quot;&gt;&lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;/code&gt; &lt;br /&gt;
+and after another pass: &lt;code class=&quot;highlighter-rouge&quot;&gt;()&lt;/code&gt; &lt;br /&gt;
+until after one last pass we’re left with the empty string &lt;script type=&quot;math/tex&quot;&gt;\epsilon&lt;/script&gt;.&lt;/p&gt;
+
+&lt;p&gt;But applying the same process to the invalid string: &lt;code class=&quot;highlighter-rouge&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;)&lt;/span&gt;&lt;/code&gt; will yield the same string again.&lt;/p&gt;
+
+&lt;p&gt;You can think of the above as repeatedly removing the leaves of a tree represented by our string, after each pass, our tree gets smaller until it can shrink no more: in which case it’s empty - or it’s not a tree :(&lt;/p&gt;
+
+&lt;p&gt;So in python, our method might look like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;brackets&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;brackets&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;()&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;[]&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;oldString&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;br&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;brackets&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;replace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;br&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	     
+		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+			&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+			&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oldString&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+				&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
+			&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+				&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;brackets&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now this recursive solution is OK, but now we’re using another stack implicitly: the call stack. ugh.&lt;/p&gt;
+
+&lt;p&gt;We actually don’t need this recursive feature if we update some bits of state ourselves:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;bracketsIter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;brackets&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;()&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;[]&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;oldString&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;&quot;&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oldString&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;oldString&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
+			&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;br&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;brackets&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+				&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;replace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;br&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	     
+			&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+				&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;So this new iterative approach will terminate, returning &lt;code class=&quot;highlighter-rouge&quot;&gt;False&lt;/code&gt;, if our string can’t be reduced further. Or returning &lt;code class=&quot;highlighter-rouge&quot;&gt;True&lt;/code&gt; if our string is ever empty.&lt;/p&gt;
+
+&lt;p&gt;Now this algorithm has a worse asymptotic time complexity than the standard approach with a stack. &lt;br /&gt;
+But it can run in place on the string, whereas the method with a stack required O(n) space.&lt;/p&gt;</content><summary type="html">It’s the final year of my degree, so I’m doing a few job interviews at the moment. And I’ve run in to the following problem a few times:</summary></entry></feed>
