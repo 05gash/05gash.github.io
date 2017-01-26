@@ -1,6 +1,7 @@
 ---
 layout: default
 title: greg's blog
+date: 2017-01-26
 ---
 # [](#header-1)Nested Brackets
 
