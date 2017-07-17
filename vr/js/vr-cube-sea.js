@@ -33,11 +33,13 @@ window.VRCubeSea = (function () {
   var cubeSeaFS = [
     "precision mediump float;",
     "uniform sampler2D diffuse;",
+    "uniform float frameCounter;",
     "varying vec2 vTexCoord;",
     "varying vec3 vLight;",
 
     "void main() {",
-    "  gl_FragColor = vec4(vLight, 1.0) * texture2D(diffuse, vTexCoord);",
+    "//gl_FragColor = vec4(vLight, 1.0) * texture2D(diffuse, vTexCoord);",
+    "gl_FragColor = mod(vec4(frameCounter, frameCounter, frameCounter, 1.0), vec4(2.0,2.0,2.0,1.0));",
     "}",
   ].join("\n");
 
@@ -253,6 +255,7 @@ window.VRCubeSea = (function () {
     gl.uniformMatrix4fv(program.uniform.modelViewMat, false, modelViewMat);
     mat3.identity(this.normalMat);
     gl.uniformMatrix3fv(program.uniform.normalMat, false, this.normalMat);
+    gl.uniform1f(program.uniform.frameCounter, false, timestamp);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vertBuffer);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
@@ -280,7 +283,7 @@ window.VRCubeSea = (function () {
       // so we can just use the non-position parts of the matrix
       // directly, this is cheaper than the transpose+inverse that
       // normalFromMat4 would do.
-      mat3.fromMat4(this.normalMat, this.heroRotationMat);
+      mat3.fromMat4(this. normalMat, this.heroRotationMat);
       gl.uniformMatrix3fv(program.uniform.normalMat, false, this.normalMat);
 
       gl.drawElements(gl.TRIANGLES, this.heroCount, gl.UNSIGNED_SHORT, this.heroOffset * 2);

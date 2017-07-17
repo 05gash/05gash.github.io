@@ -125,6 +125,7 @@ found in the LICENSE file.
       var stats = null;
       var textureLoader = null;
       var splashScreen = null;
+      var frameCounter = 0.0;
 
       // This sample is going to use a slightly different start up sequence.
       // In order to show the splash screen effect we won't have any magic
@@ -306,6 +307,7 @@ found in the LICENSE file.
         splashScreen.render(frameData.rightProjectionMatrix, "right");
 
         vrDisplay.submitFrame();
+        frameCounter+=1.0;
 
         // Now that the splash screen has been rendered we can begin loading the
         // real scene:

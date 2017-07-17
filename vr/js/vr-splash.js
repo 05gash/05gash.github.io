@@ -21,16 +21,10 @@ class VRSplashScreen{
     const splashFS = `
       precision mediump float;
       uniform sampler2D diffuse;
-      uniform int frameCounter;
       varying vec2 vTexCoord;
 
-      int func_mod(int x, int y) {
-        return int(float(x)-float(y)*floor(float(x)/float(y)));
-      }
-
       void main() {
-        //gl_FragColor = texture2D(diffuse, vTexCoord);
-        gl_FragColor = (func_mod(frameCounter,2) == 0) ? vec4(0.0, 0.0, 0.0, 1.0) : vec4(1.0, 1.0, 1.0, 1.0);
+        gl_FragColor = texture2D(diffuse, vTexCoord);
       }
     `;
 
@@ -82,10 +76,6 @@ class VRSplashScreen{
 
     gl.uniformMatrix4fv(program.uniform.projectionMat, false, projectionMat);
     gl.uniformMatrix4fv(program.uniform.modelViewMat, false, this.modelViewMat);
-    gl.uniformMatrix4fv(program.uniform.modelViewMat, false, this.modelViewMat);
-
-    gl.uniform1i(program.uniform.frameCounter, false, this.frameCounter);
-    this.frameCounter++;
 
     if (this.stereo) {
       if (eye == "left") {
