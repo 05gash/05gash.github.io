@@ -38,7 +38,7 @@ window.VRCubeSea = (function () {
     "varying vec3 vLight;",
 
     "void main() {",
-    "gl_FragColor = vec4(vLight, 1.0) * texture2D(diffuse, vTexCoord);",
+    "gl_FragColor = texture2D(diffuse, vTexCoord);",
     "//gl_FragColor = mod(vec4(frameCounter, frameCounter, frameCounter, 1.0), vec4(2.0,2.0,2.0,1.0));",
     "}",
   ].join("\n");
@@ -147,7 +147,7 @@ window.VRCubeSea = (function () {
     var cubeIndices = [];
 
     // Build a single cube.
-    function appendCube (x, y, z, size) {
+    function appendPlane (x, y, z, size) {
       if (!x && !y && !z) {
         // Don't create a cube in the center.
         return;
@@ -167,7 +167,10 @@ window.VRCubeSea = (function () {
       cubeVerts.push(x - size, y + size, z + size, 0.0, 0.0, 0.0, 0.0, 1.0);
     }
 
-    appendCube(0, 0, -4, 2);
+    appendPlane(-2, -2, -4, 1.8);
+    appendPlane(2, -2, -4, 1.8);
+    appendPlane(2, 2, -4, 1.8);
+    appendPlane(-2, 2, -4, 1.8);
 
     this.indexCount = cubeIndices.length;
 
