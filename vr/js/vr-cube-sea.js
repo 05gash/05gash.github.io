@@ -184,12 +184,50 @@ window.VRCubeSea = (function () {
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeIndices), gl.STATIC_DRAW);
   };
 
-  CubeSea.prototype.render = function (projectionMat, modelViewMat, stats, timestamp) {
+  var isClicked = function(gamepad){
+    for (var j = 0; j < gamepad.buttons.length; ++j) {
+      if(gamepad.buttons[j].pressed){ 
+        return true;
+      }
+    }
+    return false;
+  };
+
+  var extractGradientSelection = function(gamepad){
+    //returns the selection the thing was pointing to, if it was indeed clicked
+    if(gamepad && isClicked(gamepad)){
+      var orientation = gamepad.pose.orientation;
+      if(orientation.x < 0){
+        //top half of the screen
+        if(orientation.w < 0){
+          //top left
+          return 1;
+        }
+        else{
+          return 4;
+        }
+      }
+      else{
+        //bottom half of the screen
+        if(orientation.w < 0){
+          return 3;
+        }
+        else{
+          return 2;
+        }
+      }
+    }
+    else{
+      return 0;
+    }
+  };
+
+  CubeSea.prototype.render = function (projectionMat, modelViewMat, gamepad, stats, timestamp) {
     var gl = this.gl;
     var program = this.program;
+    var selection = extractGradientSelection(gamepad);
 
     program.use();
-
     gl.uniformMatrix4fv(program.uniform.projectionMat, false, projectionMat);
     gl.uniformMatrix4fv(program.uniform.modelViewMat, false, modelViewMat);
     mat3.identity(this.normalMat);
@@ -236,6 +274,9 @@ window.VRCubeSea = (function () {
       mat4.rotateX(this.statsMat, this.statsMat, -0.75);
       mat4.multiply(this.statsMat, modelViewMat, this.statsMat);
       stats.render(projectionMat, this.statsMat);
+    }
+    if(selection){
+      console.log(selection);
     }
   };
 

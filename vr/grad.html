@@ -125,7 +125,6 @@ found in the LICENSE file.
       var stats = null;
       var textureLoader = null;
       var splashScreen = null;
-      var frameCounter = 0.0;
 
       // This sample is going to use a slightly different start up sequence.
       // In order to show the splash screen effect we won't have any magic
@@ -184,7 +183,7 @@ found in the LICENSE file.
 
           // Once the scene is fully loaded kick off the animation loop
           vrDisplay.requestAnimationFrame(onAnimationFrame);
-        }, 10000);
+        }, 1000);
       }
 
       function onVRRequestPresent () {
@@ -307,7 +306,6 @@ found in the LICENSE file.
         splashScreen.render(frameData.rightProjectionMatrix, "right");
 
         vrDisplay.submitFrame();
-        frameCounter+=1.0;
 
         // Now that the splash screen has been rendered we can begin loading the
         // real scene:
@@ -327,9 +325,9 @@ found in the LICENSE file.
         vrDisplay.getFrameData(frameData);
 
         gl.viewport(0, 0, webglCanvas.width * 0.5, webglCanvas.height);
-        cubeSea.render(frameData.leftProjectionMatrix, frameData.leftViewMatrix);
+        cubeSea.render(frameData.leftProjectionMatrix, frameData.leftViewMatrix, navigator.getGamepads()[0]);
 
-        gl.viewport(webglCanvas.width * 0.5, 0, webglCanvas.width * 0.5, webglCanvas.height);
+        gl.viewport(webglCanvas.width * 0.5, 0, webglCanvas.width * 0.5, webglCanvas.height, navigator.getGamepads()[0]);
         cubeSea.render(frameData.rightProjectionMatrix, frameData.rightViewMatrix);
 
         vrDisplay.submitFrame();
