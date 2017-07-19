@@ -289,30 +289,6 @@ found in the LICENSE file.
         cubeIsland.render(projection, view);
 
         // Draw head-locked standing HMD coordinate system for debugging.
-        mat4.identity(hmdDebugMat);
-        debugGeom.bind(projection, hmdDebugMat);
-
-        quat.invert(hmdDebugCounterRotation,
-                    hmdPose.orientation || [0, 0, 0, 1]);
-        mat4.fromRotationTranslation(hmdDebugMat,
-                                     hmdDebugCounterRotation,
-                                     [-0.1, 0.17, -0.5]);
-        debugGeom.drawCoordinateAxes(hmdDebugMat);
-        // Show angular velocity from gyro if available
-        if (hmdPose.angularVelocity) {
-          vec4.set(arrowColor, 0.7, 0.5, 0.3, 1);
-          debugGeom.drawArrow(hmdDebugMat, hmdPose.angularVelocity, arrowColor);
-        }
-        // Show linear acceleration if available
-        if (hmdPose.linearAcceleration) {
-          vec4.set(arrowColor, 0.3, 0.2, 0.7, 1);
-          // Linear acceleration is large since it contains 9.81 m/s^2 gravity,
-          // scale it down so that it's more visible.
-          debugGeom.drawArrow(hmdDebugMat, hmdPose.linearAcceleration, arrowColor, 0.15);
-        }
-
-        debugGeom.bind(projection, view);
-
         // Render every gamepad with a pose we found
         for (var i = 0; i < gamepads.length; ++i) {
           var gamepad = gamepads[i];

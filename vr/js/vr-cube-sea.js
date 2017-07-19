@@ -226,7 +226,7 @@ window.VRCubeSea = (function () {
   CubeSea.prototype.render = function (projectionMat, modelViewMat, stats, timestamp) {
     var gl = this.gl;
     var program = this.program;
-    //var selection = extractGradientSelection(gamepad);
+    var selection = extractGradientSelection(gamepad);
 
     program.use();
     gl.uniformMatrix4fv(program.uniform.projectionMat, false, projectionMat);
@@ -275,6 +275,9 @@ window.VRCubeSea = (function () {
       mat4.rotateX(this.statsMat, this.statsMat, -0.75);
       mat4.multiply(this.statsMat, modelViewMat, this.statsMat);
       stats.render(projectionMat, this.statsMat);
+    }
+    if(selection){
+      console.log(selection);
     }
   };
 
