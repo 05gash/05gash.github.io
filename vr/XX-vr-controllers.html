@@ -128,9 +128,9 @@ found in the LICENSE file.
         gl.enable(gl.CULL_FACE);
 
         var textureLoader = new WGLUTextureLoader(gl);
-        var texture = textureLoader.loadTexture("media/textures/cube-sea.png");
+        var texture = textureLoader.loadTexture("media/textures/lum_grad.png");
 
-        cubeIsland = new VRCubeSea(gl, texture, 2, 2);
+        cubeIsland = new VRCubeSea(gl, texture);
 
         var enablePerformanceMonitoring = WGLUUrl.getBool(
             'enablePerformanceMonitoring', false);
@@ -286,7 +286,7 @@ found in the LICENSE file.
       var arrowColor = vec4.create();
 
       function renderSceneView (projection, view, hmdPose, gamepads) {
-        cubeIsland.render(projection, view, stats);
+        cubeIsland.render(projection, view);
 
         // Draw head-locked standing HMD coordinate system for debugging.
         mat4.identity(hmdDebugMat);
