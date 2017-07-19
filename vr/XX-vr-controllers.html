@@ -61,7 +61,7 @@ found in the LICENSE file.
         InitializeWebVRPolyfill();
       } else {
         // Shim for migration from older version of WebVR. Shouldn't be necessary for very long.
-        InitializeSpecShim();
+        //InitializeSpecShim();
       }
     </script>
     <!-- End sample polyfill enabling logic -->
@@ -73,7 +73,7 @@ found in the LICENSE file.
     <script src="js/third-party/wglu/wglu-stats.js"></script>
     <script src="js/third-party/wglu/wglu-texture.js"></script>
 
-    <script src="js/vr-cube-island.js"></script>
+    <script src="js/vr-cube-sea.js"></script>
     <script src="js/vr-samples-util.js"></script>
   </head>
   <body>
@@ -130,7 +130,7 @@ found in the LICENSE file.
         var textureLoader = new WGLUTextureLoader(gl);
         var texture = textureLoader.loadTexture("media/textures/cube-sea.png");
 
-        cubeIsland = new VRCubeIsland(gl, texture, 2, 2);
+        cubeIsland = new VRCubeSea(gl, texture, 2, 2);
 
         var enablePerformanceMonitoring = WGLUUrl.getBool(
             'enablePerformanceMonitoring', false);
@@ -198,7 +198,7 @@ found in the LICENSE file.
             if (vrDisplay.stageParameters &&
                 vrDisplay.stageParameters.sizeX > 0 &&
                 vrDisplay.stageParameters.sizeZ > 0) {
-              cubeIsland.resize(vrDisplay.stageParameters.sizeX, vrDisplay.stageParameters.sizeZ);
+              //cubeIsland.resize(vrDisplay.stageParameters.sizeX, vrDisplay.stageParameters.sizeZ);
             }
 
             if (vrDisplay.capabilities.canPresent)

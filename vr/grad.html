@@ -24,7 +24,7 @@ found in the LICENSE file.
     -->
 
     <style>
-      canvas {
+      #webgl-canvas {
         box-sizing: border-box;
         height: 100%;
         left: 0;
@@ -320,14 +320,26 @@ found in the LICENSE file.
 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+        var gamepad = null;
+        var gamepads = navigator.getGamepads();
+
+        for(var i = 0; i<gamepads.length; ++i){
+          if(gamepads[i]){
+            if(gamepads[i].pose){
+              gamepad = gamepad[i];
+            }
+          }
+        }
+
+
         vrDisplay.requestAnimationFrame(onAnimationFrame);
 
         vrDisplay.getFrameData(frameData);
 
         gl.viewport(0, 0, webglCanvas.width * 0.5, webglCanvas.height);
-        cubeSea.render(frameData.leftProjectionMatrix, frameData.leftViewMatrix, navigator.getGamepads()[0]);
+        cubeSea.render(frameData.leftProjectionMatrix, frameData.leftViewMatrix, gamepad);
 
-        gl.viewport(webglCanvas.width * 0.5, 0, webglCanvas.width * 0.5, webglCanvas.height, navigator.getGamepads()[0]);
+        gl.viewport(webglCanvas.width * 0.5, 0, webglCanvas.width * 0.5, webglCanvas.height, gamepad);
         cubeSea.render(frameData.rightProjectionMatrix, frameData.rightViewMatrix);
 
         vrDisplay.submitFrame();

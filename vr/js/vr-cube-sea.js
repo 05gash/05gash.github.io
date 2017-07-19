@@ -173,7 +173,7 @@ window.VRCubeSea = (function () {
     appendPlane(-2, 2, -4, 1.8);
 
     this.indexCount = cubeIndices.length;
-
+  
 
     this.vertBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vertBuffer);
@@ -184,6 +184,7 @@ window.VRCubeSea = (function () {
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeIndices), gl.STATIC_DRAW);
   };
 
+/*
   var isClicked = function(gamepad){
     for (var j = 0; j < gamepad.buttons.length; ++j) {
       if(gamepad.buttons[j].pressed){ 
@@ -221,11 +222,11 @@ window.VRCubeSea = (function () {
       return 0;
     }
   };
-
-  CubeSea.prototype.render = function (projectionMat, modelViewMat, gamepad, stats, timestamp) {
+*/
+  CubeSea.prototype.render = function (projectionMat, modelViewMat, stats, timestamp) {
     var gl = this.gl;
     var program = this.program;
-    var selection = extractGradientSelection(gamepad);
+    //var selection = extractGradientSelection(gamepad);
 
     program.use();
     gl.uniformMatrix4fv(program.uniform.projectionMat, false, projectionMat);
@@ -274,9 +275,6 @@ window.VRCubeSea = (function () {
       mat4.rotateX(this.statsMat, this.statsMat, -0.75);
       mat4.multiply(this.statsMat, modelViewMat, this.statsMat);
       stats.render(projectionMat, this.statsMat);
-    }
-    if(selection){
-      console.log(selection);
     }
   };
 
