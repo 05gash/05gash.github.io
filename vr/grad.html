@@ -74,7 +74,7 @@ found in the LICENSE file.
   <body>
     <p>This sample only displays in VR. To view click the "Enter VR" button.</p>
     <script>
-      /* global mat4, VRCubeSea, WGLUStats, WGLUTextureLoader, VRSamplesUtil */
+      /* global mat4, VRGradientExperiment, WGLUStats, WGLUTextureLoader, VRSamplesUtil */
       (function () {
       "use strict";
 
@@ -121,7 +121,7 @@ found in the LICENSE file.
       // WebGL setup.
       var webglCanvas = null;
       var gl = null;
-      var cubeSea = null;
+      var gradientExperiment = null;
       var stats = null;
       var textureLoader = null;
       var splashScreen = null;
@@ -175,8 +175,10 @@ found in the LICENSE file.
       function loadScene() {
         // Totally cheating here to pretend like our load times are long
         setTimeout(function () {
-          var texture = textureLoader.loadTexture("media/textures/lum_grad.png");
-          cubeSea = new VRCubeSea(gl, texture);
+          var texturePerfect = textureLoader.loadTexture("media/textures/perfect_gradient.png");
+          var textureQuantised = textureLoader.loadTexture("media/textures/quantised_gradient.png");
+
+          gradientExperiment = new VRGradientExperiment(gl, texturePerfect, textureQuantised);
           var enablePerformanceMonitoring = WGLUUrl.getBool(
               'enablePerformanceMonitoring', false);
           stats = new WGLUStats(gl, enablePerformanceMonitoring);
@@ -337,10 +339,10 @@ found in the LICENSE file.
         vrDisplay.getFrameData(frameData);
 
         gl.viewport(0, 0, webglCanvas.width * 0.5, webglCanvas.height);
-        cubeSea.render(frameData.leftProjectionMatrix, frameData.leftViewMatrix, gamepad);
+        gradientExperiment.render(frameData.leftProjectionMatrix, frameData.leftViewMatrix, gamepad, t);
 
-        gl.viewport(webglCanvas.width * 0.5, 0, webglCanvas.width * 0.5, webglCanvas.height, gamepad);
-        cubeSea.render(frameData.rightProjectionMatrix, frameData.rightViewMatrix);
+        gl.viewport(webglCanvas.width * 0.5, 0, webglCanvas.width * 0.5, webglCanvas.height, gamepad, t);
+        gradientExperiment.render(frameData.rightProjectionMatrix, frameData.rightViewMatrix);
 
         vrDisplay.submitFrame();
 

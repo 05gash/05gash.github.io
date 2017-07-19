@@ -4,10 +4,10 @@
 
 /* global mat4, WGLUProgram */
 
-window.VRCubeSea = (function () {
+window.VRGradientExperiment = (function () {
   "use strict";
 
-  var cubeSeaVS = [
+  var GradientExperimentVS = [
     "uniform mat4 projectionMat;",
     "uniform mat4 modelViewMat;",
     "uniform mat3 normalMat;",
@@ -30,7 +30,7 @@ window.VRCubeSea = (function () {
     "}",
   ].join("\n");
 
-  var cubeSeaFS = [
+  var GradientExperimentFS = [
     "precision mediump float;",
     "uniform sampler2D diffuse;",
     "uniform float frameCounter;",
@@ -45,7 +45,7 @@ window.VRCubeSea = (function () {
 
   // Used when we want to stress the GPU a bit more.
   // Stolen with love from https://www.clicktorelease.com/code/codevember-2016/4/
-  var heavyCubeSeaFS = [
+  var heavyGradientExperimentFS = [
     "precision mediump float;",
 
     "uniform sampler2D diffuse;",
@@ -119,7 +119,7 @@ window.VRCubeSea = (function () {
     "}"
   ].join("\n");
 
-  var CubeSea = function (gl, texture, gridSize, cubeScale, heavy) {
+  var GradientExperiment = function (gl, texturePerfect, textureQuantised, gridSize, cubeScale, heavy) {
     this.gl = gl;
 
     if (!gridSize) {
@@ -131,11 +131,14 @@ window.VRCubeSea = (function () {
     this.heroRotationMat = mat4.create();
     this.heroModelViewMat = mat4.create();
 
-    this.texture = texture;
+    this.texturePerfect = texturePerfect;
+    this.textureQuantised = textureQuantised;
+
+    this.quantisedPlane = getRandomInt(1,4); //denotes the plane that contains the quantised texture
 
     this.program = new WGLUProgram(gl);
-    this.program.attachShaderSource(cubeSeaVS, gl.VERTEX_SHADER);
-    this.program.attachShaderSource(heavy ? heavyCubeSeaFS :cubeSeaFS, gl.FRAGMENT_SHADER);
+    this.program.attachShaderSource(GradientExperimentVS, gl.VERTEX_SHADER);
+    this.program.attachShaderSource(heavy ? heavyGradientExperimentFS :GradientExperimentFS, gl.FRAGMENT_SHADER);
     this.program.bindAttribLocation({
       position: 0,
       texCoord: 1,
@@ -165,16 +168,18 @@ window.VRCubeSea = (function () {
       cubeVerts.push(x + size, y - size, z + size, 1.0, 1.0, 0.0, 0.0, 1.0);
       cubeVerts.push(x + size, y + size, z + size, 1.0, 0.0, 0.0, 0.0, 1.0);
       cubeVerts.push(x - size, y + size, z + size, 0.0, 0.0, 0.0, 0.0, 1.0);
+      return cubeIndices.length;
     }
 
-    appendPlane(-2, -2, -4, 1.8);
-    appendPlane(2, -2, -4, 1.8);
-    appendPlane(2, 2, -4, 1.8);
-    appendPlane(-2, 2, -4, 1.8);
+    this.planes = []; //contains the index position of the end of the index buffer that the plane occupies 
+    this.planes.push(0);
+    this.planes.push(appendPlane(-2, -2, -4, 1.8));
+    this.planes.push(appendPlane(2, -2, -4, 1.8));
+    this.planes.push(appendPlane(2, 2, -4, 1.8));
+    this.planes.push(appendPlane(-2, 2, -4, 1.8));
 
     this.indexCount = cubeIndices.length;
   
-
     this.vertBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vertBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(cubeVerts), gl.STATIC_DRAW);
@@ -183,6 +188,10 @@ window.VRCubeSea = (function () {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeIndices), gl.STATIC_DRAW);
   };
+
+  var getRandomInt = function(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 
 
   var isClicked = function(gamepad){
@@ -224,17 +233,15 @@ window.VRCubeSea = (function () {
   };
 
 
-  CubeSea.prototype.render = function (projectionMat, modelViewMat, gamepad, stats, timestamp) {
+  GradientExperiment.prototype.render = function (projectionMat, modelViewMat, gamepad, timestamp, stats) {
     var gl = this.gl;
     var program = this.program;
     var selection = extractGradientSelection(gamepad);
 
     program.use();
     gl.uniformMatrix4fv(program.uniform.projectionMat, false, projectionMat);
-    gl.uniformMatrix4fv(program.uniform.modelViewMat, false, modelViewMat);
     mat3.identity(this.normalMat);
     gl.uniformMatrix3fv(program.uniform.normalMat, false, this.normalMat);
-    gl.uniform1f(program.uniform.frameCounter, timestamp);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vertBuffer);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
@@ -247,12 +254,32 @@ window.VRCubeSea = (function () {
     gl.vertexAttribPointer(program.attrib.texCoord, 2, gl.FLOAT, false, 32, 12);
     gl.vertexAttribPointer(program.attrib.normal, 3, gl.FLOAT, false, 32, 20);
 
-    gl.activeTexture(gl.TEXTURE0);
-    gl.uniform1i(this.program.uniform.diffuse, 0);
-    gl.bindTexture(gl.TEXTURE_2D, this.texture);
+    gl.activeTexture(gl.TEXTURE0); //texture 0 contains the perfect gradient
+    gl.bindTexture(gl.TEXTURE_2D, this.texturePerfect);
 
-    gl.drawElements(gl.TRIANGLES, this.indexCount, gl.UNSIGNED_SHORT, 0);
+    gl.activeTexture(gl.TEXTURE1); //texture 1 contains the quantised gradient
+    gl.bindTexture(gl.TEXTURE_2D, this.textureQuantised);
+    
+    for(var i = 1; i<=4; i++){ //draw each of the four planes
 
+      if(i == this.quantisedPlane){ //select the texture based on the plane number
+        gl.uniform1i(this.program.uniform.diffuse, 1);
+      } 
+      else{
+        gl.uniform1i(this.program.uniform.diffuse, 0);
+      }
+      if(i == selection){
+        mat4.fromRotation(this.heroRotationMat, timestamp / 2000, [0, 1, 0]);
+        mat4.multiply(this.heroModelViewMat, modelViewMat, this.heroRotationMat);
+        gl.uniformMatrix4fv(program.uniform.modelViewMat, false, this.heroModelViewMat);
+      }
+      else{
+        gl.uniformMatrix4fv(program.uniform.modelViewMat, false, modelViewMat);
+      }
+
+      gl.drawElements(gl.TRIANGLES, this.planes[i]-this.planes[i-1], gl.UNSIGNED_SHORT, this.planes[i-1]*2);
+    }
+    /*
     if (timestamp) {
       mat4.fromRotation(this.heroRotationMat, timestamp / 2000, [0, 1, 0]);
       mat4.multiply(this.heroModelViewMat, modelViewMat, this.heroRotationMat);
@@ -267,6 +294,7 @@ window.VRCubeSea = (function () {
 
       gl.drawElements(gl.TRIANGLES, this.heroCount, gl.UNSIGNED_SHORT, this.heroOffset * 2);
     }
+    */
 
     if (stats) {
       // To ensure that the FPS counter is visible in VR mode we have to
@@ -282,5 +310,5 @@ window.VRCubeSea = (function () {
     }
   };
 
-  return CubeSea;
+  return GradientExperiment;
 })();
