@@ -341,8 +341,8 @@ found in the LICENSE file.
         gl.viewport(0, 0, webglCanvas.width * 0.5, webglCanvas.height);
         gradientExperiment.render(frameData.leftProjectionMatrix, frameData.leftViewMatrix, gamepad, t);
 
-        gl.viewport(webglCanvas.width * 0.5, 0, webglCanvas.width * 0.5, webglCanvas.height, gamepad, t);
-        gradientExperiment.render(frameData.rightProjectionMatrix, frameData.rightViewMatrix);
+        gl.viewport(webglCanvas.width * 0.5, 0, webglCanvas.width * 0.5, webglCanvas.height);
+        gradientExperiment.render(frameData.rightProjectionMatrix, frameData.rightViewMatrix, gamepad, t);
 
         vrDisplay.submitFrame();
 

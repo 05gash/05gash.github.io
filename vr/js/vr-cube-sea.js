@@ -130,6 +130,7 @@ window.VRGradientExperiment = (function () {
     this.normalMat = mat3.create();
     this.heroRotationMat = mat4.create();
     this.heroModelViewMat = mat4.create();
+    this.gamepadMat = mat4.create();
 
     this.texturePerfect = texturePerfect;
     this.textureQuantised = textureQuantised;
@@ -173,10 +174,10 @@ window.VRGradientExperiment = (function () {
 
     this.planes = []; //contains the index position of the end of the index buffer that the plane occupies 
     this.planes.push(0);
+    this.planes.push(appendPlane(-2, 2, -4, 1.8));
+    this.planes.push(appendPlane(2, 2, -4, 1.8));
     this.planes.push(appendPlane(-2, -2, -4, 1.8));
     this.planes.push(appendPlane(2, -2, -4, 1.8));
-    this.planes.push(appendPlane(2, 2, -4, 1.8));
-    this.planes.push(appendPlane(-2, 2, -4, 1.8));
 
     this.indexCount = cubeIndices.length;
   
@@ -206,12 +207,15 @@ window.VRGradientExperiment = (function () {
   var extractGradientSelection = function(gamepad){
     //returns the selection the thing was pointing to, if it was indeed clicked
     if(gamepad && isClicked(gamepad)){
-      var orientation = gamepad.pose.orientation;
-      if(orientation[0] < 0){
+      var orientation = mat4.create()
+      getPoseMatrix(orientation, gamepad.pose, true);
+      var unit = vec4.fromValues(0, 0, 1, 1);
+      mat4.multiply(unit, orientation, unit);
+      if(unit[0] < 0){
         //top half of the screen
-        if(orientation[3] < 0){
+        if(unit[1] < 0){
           //top left
-          return 1;
+          return 2;
         }
         else{
           return 4;
@@ -219,11 +223,11 @@ window.VRGradientExperiment = (function () {
       }
       else{
         //bottom half of the screen
-        if(orientation[3] < 0){
-          return 3;
+        if(unit[1] < 0){
+          return 1;
         }
         else{
-          return 2;
+          return 3;
         }
       }
     }
@@ -231,6 +235,12 @@ window.VRGradientExperiment = (function () {
       return 0;
     }
   };
+
+
+  function getPoseMatrix (out, pose) {
+    var orientation = pose.orientation;
+    mat4.fromRotationTranslation(out, orientation, vec3.fromValues(0,0,0));
+  }
 
 
   GradientExperiment.prototype.render = function (projectionMat, modelViewMat, gamepad, timestamp, stats) {
@@ -269,9 +279,11 @@ window.VRGradientExperiment = (function () {
         gl.uniform1i(this.program.uniform.diffuse, 0);
       }
       if(i == selection){
-        mat4.fromRotation(this.heroRotationMat, timestamp / 2000, [0, 1, 0]);
+        mat4.fromScaling(this.heroRotationMat, (0.5 + Math.cos(timestamp)) * [1, 1, 0]);
         mat4.multiply(this.heroModelViewMat, modelViewMat, this.heroRotationMat);
         gl.uniformMatrix4fv(program.uniform.modelViewMat, false, this.heroModelViewMat);
+        mat3.fromMat4(this. normalMat, this.heroRotationMat);
+        gl.uniformMatrix3fv(program.uniform.normalMat, false, this.normalMat);
       }
       else{
         gl.uniformMatrix4fv(program.uniform.modelViewMat, false, modelViewMat);
