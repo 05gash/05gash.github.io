@@ -36,9 +36,11 @@ window.VRGradientExperiment = (function () {
     "uniform float frameCounter;",
     "varying vec2 vTexCoord;",
     "varying vec3 vLight;",
-
     "void main() {",
-    "gl_FragColor = texture2D(diffuse, vTexCoord);",
+    "vec4 tex = texture2D(diffuse, vTexCoord);",
+    "highp float lum = tex.x* (255.0 / 256.0); ",
+    "lum += tex.y*(1.0 / 256.0);",
+    "gl_FragColor = vec4(vec3(lum), 1.0);",
     "//gl_FragColor = mod(vec4(frameCounter, frameCounter, frameCounter, 1.0), vec4(2.0,2.0,2.0,1.0));",
     "}",
   ].join("\n");

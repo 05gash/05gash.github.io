@@ -175,8 +175,8 @@ found in the LICENSE file.
       function loadScene() {
         // Totally cheating here to pretend like our load times are long
         setTimeout(function () {
-          var texturePerfect = textureLoader.loadTexture("media/textures/perfect_gradient.png");
-          var textureQuantised = textureLoader.loadTexture("media/textures/quantised_gradient.png");
+          var texturePerfect = textureLoader.loadTexture("media/textures/grad_10.png");
+          var textureQuantised = textureLoader.loadTexture("media/textures/grad_7.png");
 
           gradientExperiment = new VRGradientExperiment(gl, texturePerfect, textureQuantised);
           var enablePerformanceMonitoring = WGLUUrl.getBool(
