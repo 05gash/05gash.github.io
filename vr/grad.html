@@ -178,7 +178,7 @@ found in the LICENSE file.
           var texturePerfect = textureLoader.loadTexture("media/textures/grad_10.png");
           var textureQuantised = textureLoader.loadTexture("media/textures/grad_7.png");
 
-          gradientExperiment = new VRGradientExperiment(gl, texturePerfect, textureQuantised);
+          gradientExperiment = new VRGradientExperiment(gl, texturePerfect, textureQuantised, 6);
           var enablePerformanceMonitoring = WGLUUrl.getBool(
               'enablePerformanceMonitoring', false);
           stats = new WGLUStats(gl, enablePerformanceMonitoring);

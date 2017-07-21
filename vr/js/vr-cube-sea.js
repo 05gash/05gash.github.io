@@ -121,13 +121,15 @@ window.VRGradientExperiment = (function () {
     "}"
   ].join("\n");
 
-  var GradientExperiment = function (gl, texturePerfect, textureQuantised, gridSize, cubeScale, heavy) {
+  var GradientExperiment = function (gl, texturePerfect, textureQuantised, wallDistance, cubeScale, heavy) {
     this.gl = gl;
 
-    if (!gridSize) {
-      gridSize = 10;
+    if(wallDistance){ 
+      this.wallDistance = wallDistance;
     }
-
+    else{
+      this.wallDistance = 5;
+    }
     this.statsMat = mat4.create();
     this.normalMat = mat3.create();
     this.heroRotationMat = mat4.create();
@@ -176,10 +178,10 @@ window.VRGradientExperiment = (function () {
 
     this.planes = []; //contains the index position of the end of the index buffer that the plane occupies 
     this.planes.push(0);
-    this.planes.push(appendPlane(-2, 2, -4, 1.8));
-    this.planes.push(appendPlane(2, 2, -4, 1.8));
-    this.planes.push(appendPlane(-2, -2, -4, 1.8));
-    this.planes.push(appendPlane(2, -2, -4, 1.8));
+    this.planes.push(appendPlane(-2, 2, -this.wallDistance, 1.8));
+    this.planes.push(appendPlane(2, 2, -this.wallDistance, 1.8));
+    this.planes.push(appendPlane(-2, -2, -this.wallDistance, 1.8));
+    this.planes.push(appendPlane(2, -2, -this.wallDistance, 1.8));
 
     this.indexCount = cubeIndices.length;
   
