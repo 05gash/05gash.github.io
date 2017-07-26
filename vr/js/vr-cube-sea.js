@@ -38,10 +38,9 @@ window.VRGradientExperiment = (function () {
     "varying vec3 vLight;",
     "void main() {",
     "vec4 tex = texture2D(diffuse, vTexCoord);",
-    "highp float lum = tex.x* (255.0 / 256.0); ",
-    "lum += tex.y*(1.0 / 256.0);",
+    "highp float lum = tex.x* (256.0 / 257.0);; ",
+    "lum += tex.y*(1.0 / 257.0);",
     "gl_FragColor = vec4(vec3(lum), 1.0);",
-    "//gl_FragColor = mod(vec4(frameCounter, frameCounter, frameCounter, 1.0), vec4(2.0,2.0,2.0,1.0));",
     "}",
   ].join("\n");
 
@@ -199,58 +198,9 @@ window.VRGradientExperiment = (function () {
   }
 
 
-  var isClicked = function(gamepad){
-    for (var j = 0; j < gamepad.buttons.length; ++j) {
-      if(gamepad.buttons[j].pressed){ 
-        return true;
-      }
-    }
-    return false;
-  };
-
-  var extractGradientSelection = function(gamepad){
-    //returns the selection the thing was pointing to, if it was indeed clicked
-    if(gamepad && isClicked(gamepad)){
-      var orientation = mat4.create()
-      getPoseMatrix(orientation, gamepad.pose, true);
-      var unit = vec4.fromValues(0, 0, 1, 1);
-      mat4.multiply(unit, orientation, unit);
-      if(unit[0] < 0){
-        //top half of the screen
-        if(unit[1] < 0){
-          //top left
-          return 2;
-        }
-        else{
-          return 4;
-        }
-      }
-      else{
-        //bottom half of the screen
-        if(unit[1] < 0){
-          return 1;
-        }
-        else{
-          return 3;
-        }
-      }
-    }
-    else{
-      return 0;
-    }
-  };
-
-
-  function getPoseMatrix (out, pose) {
-    var orientation = pose.orientation;
-    mat4.fromRotationTranslation(out, orientation, vec3.fromValues(0,0,0));
-  }
-
-
-  GradientExperiment.prototype.render = function (projectionMat, modelViewMat, gamepad, timestamp, stats) {
+  GradientExperiment.prototype.render = function (projectionMat, modelViewMat, selection, timestamp, stats) {
     var gl = this.gl;
     var program = this.program;
-    var selection = extractGradientSelection(gamepad);
 
     program.use();
     gl.uniformMatrix4fv(program.uniform.projectionMat, false, projectionMat);
@@ -320,9 +270,6 @@ window.VRGradientExperiment = (function () {
       mat4.rotateX(this.statsMat, this.statsMat, -0.75);
       mat4.multiply(this.statsMat, modelViewMat, this.statsMat);
       stats.render(projectionMat, this.statsMat);
-    }
-    if(selection){
-      console.log(selection);
     }
   };
 
