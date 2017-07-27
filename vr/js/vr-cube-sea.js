@@ -32,15 +32,17 @@ window.VRGradientExperiment = (function () {
 
   var GradientExperimentFS = [
     "precision mediump float;",
-    "uniform sampler2D diffuse;",
+    "uniform sampler2D gradientHi;",
+    "uniform sampler2D gradientLo;",
     "uniform float frameCounter;",
     "varying vec2 vTexCoord;",
     "varying vec3 vLight;",
     "void main() {",
-    "vec4 tex = texture2D(diffuse, vTexCoord);",
-    "highp float lum = tex.x* (256.0 / 257.0);; ",
-    "lum += tex.y*(1.0 / 257.0);",
-    "gl_FragColor = vec4(vec3(lum), 1.0);",
+    "vec4 texHi = texture2D(gradientHi, vTexCoord);",
+    "vec4 texLo = texture2D(gradientLo, vTexCoord);",
+    "highp vec4 lum = texHi;",
+    "lum += texLo * (1.0 / 256.0);",
+    "gl_FragColor = lum;",
     "}",
   ].join("\n");
 
@@ -120,7 +122,7 @@ window.VRGradientExperiment = (function () {
     "}"
   ].join("\n");
 
-  var GradientExperiment = function (gl, texturePerfect, textureQuantised, wallDistance, cubeScale, heavy) {
+  var GradientExperiment = function (gl, texturePerfectHi, texturePerfectLo, textureQuantisedHi, textureQuantisedLo, wallDistance, cubeScale, heavy) {
     this.gl = gl;
 
     if(wallDistance){ 
@@ -135,8 +137,10 @@ window.VRGradientExperiment = (function () {
     this.heroModelViewMat = mat4.create();
     this.gamepadMat = mat4.create();
 
-    this.texturePerfect = texturePerfect;
-    this.textureQuantised = textureQuantised;
+    this.texturePerfectHi = texturePerfectHi;
+    this.texturePerfectLo = texturePerfectLo;
+    this.textureQuantisedHi = textureQuantisedHi;
+    this.textureQuantisedLo = textureQuantisedLo;
 
     this.quantisedPlane = getRandomInt(1,4); //denotes the plane that contains the quantised texture
 
@@ -218,19 +222,27 @@ window.VRGradientExperiment = (function () {
     gl.vertexAttribPointer(program.attrib.texCoord, 2, gl.FLOAT, false, 32, 12);
     gl.vertexAttribPointer(program.attrib.normal, 3, gl.FLOAT, false, 32, 20);
 
-    gl.activeTexture(gl.TEXTURE0); //texture 0 contains the perfect gradient
-    gl.bindTexture(gl.TEXTURE_2D, this.texturePerfect);
+    gl.activeTexture(gl.TEXTURE0); //texture 0 contains the perfect gradient HI
+    gl.bindTexture(gl.TEXTURE_2D, this.texturePerfectHi);
+    gl.activeTexture(gl.TEXTURE1); //texture 1 contains the perfect gradient Lo
+    gl.bindTexture(gl.TEXTURE_2D, this.texturePerfectLo);
 
-    gl.activeTexture(gl.TEXTURE1); //texture 1 contains the quantised gradient
-    gl.bindTexture(gl.TEXTURE_2D, this.textureQuantised);
-    
+
+    gl.activeTexture(gl.TEXTURE2); //texture 2 contains the quantised gradient Lo
+    gl.bindTexture(gl.TEXTURE_2D, this.textureQuantisedHi);
+    gl.activeTexture(gl.TEXTURE3); //texture 3 contains the quantised gradient Hi
+    gl.bindTexture(gl.TEXTURE_2D, this.textureQuantisedLo);
+
+
     for(var i = 1; i<=4; i++){ //draw each of the four planes
 
       if(i == this.quantisedPlane){ //select the texture based on the plane number
-        gl.uniform1i(this.program.uniform.diffuse, 1);
+        gl.uniform1i(this.program.uniform.gradientHi, 2);
+        gl.uniform1i(this.program.uniform.gradientLo, 3);
       } 
       else{
-        gl.uniform1i(this.program.uniform.diffuse, 0);
+        gl.uniform1i(this.program.uniform.gradientHi, 0);
+        gl.uniform1i(this.program.uniform.gradientLo, 1);
       }
       if(i == selection){
         mat4.fromScaling(this.heroRotationMat, (0.5 + Math.cos(timestamp)) * [1, 1, 0]);

@@ -179,23 +179,35 @@ found in the LICENSE file.
         //we set up our connection to matlab :) then attempt to grab gradient files
 
         setTimeout(function () {
-          var perfectTextureLocation = '';
-          var quantisedTextureLocation = '';
+          var perfectTextureLocationHi = '';
+          var quantisedTextureLocationHi = '';
+          var perfectTextureLocationLo = '';
+          var quantisedTextureLocationLo = '';
+
           connection = new WebSocket('ws://localhost:30000');
           connection.onmessage = function (e) {
             selection = null;
             var json = JSON.parse(e.data);
-            perfectTextureLocation = json.refImage;
-            quantisedTextureLocation = json.quantImage;
-            console.log(quantisedTextureLocation);
-            console.log(perfectTextureLocation);
-            var texturePerfect = textureLoader.loadTexture(perfectTextureLocation);
-            var textureQuantised = textureLoader.loadTexture(quantisedTextureLocation);
+            perfectTextureLocationHi = json.refImage.replace('grad_', 'msb_grad_');
+            quantisedTextureLocationHi = json.quantImage.replace('grad_', 'msb_grad_');
+            perfectTextureLocationLo = json.refImage.replace('grad_', 'lsb_grad_');
+            quantisedTextureLocationLo = json.quantImage.replace('grad_', 'lsb_grad_');;
 
+            console.log(quantisedTextureLocationHi, quantisedTextureLocationLo);
+
+            var textureQuantisedHi = textureLoader.loadTexture(quantisedTextureLocationHi);
+
+            var texturePerfectHi = textureLoader.loadTexture(perfectTextureLocationHi);
+            
+            var textureQuantisedLo = textureLoader.loadTexture(quantisedTextureLocationLo);
+
+            var texturePerfectLo = textureLoader.loadTexture(perfectTextureLocationLo);
+
+
+            /*
             var fb = gl.createFramebuffer();
             gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
-            gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, textureQuantised, 0);
-            console.log(textureQuantised);
+            gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texturePerfect, 0);
             console.log(gl.checkFramebufferStatus(gl.FRAMEBUFFER));
             if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) == gl.FRAMEBUFFER_COMPLETE) {
               var pixels = new Uint8Array(4);
@@ -204,8 +216,8 @@ found in the LICENSE file.
 
             }
             gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-
-            gradientExperiment = new VRGradientExperiment(gl, texturePerfect, textureQuantised, 6);
+            */
+            gradientExperiment = new VRGradientExperiment(gl, texturePerfectHi, texturePerfectLo, textureQuantisedHi, textureQuantisedLo, 7.5);
             var enablePerformanceMonitoring = WGLUUrl.getBool(
                 'enablePerformanceMonitoring', false);
             stats = new WGLUStats(gl, enablePerformanceMonitoring);
