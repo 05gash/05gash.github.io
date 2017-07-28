@@ -31,17 +31,49 @@ window.VRGradientExperiment = (function () {
   ].join("\n");
 
   var GradientExperimentFS = [
-    "precision mediump float;",
+    "precision highp float;",
     "uniform sampler2D gradientHi;",
     "uniform sampler2D gradientLo;",
-    "uniform float frameCounter;",
+    "uniform float flickerCounter;",
     "varying vec2 vTexCoord;",
     "varying vec3 vLight;",
+    
+    "const float hw_bitdepth = 256.0; /* For 8-bit display */",
+    
+    "float rand(float n){return fract(sin(n) * 43758.5453123);}",
+
+    "float rand(vec2 n) {", 
+    " return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);",
+    "}",
+
+    "float noise(float p){ float fl = floor(p); float fc = fract(p); return mix(rand(fl), rand(fl + 1.0), fc);}",
+  
+    "float noise(vec2 n) {",
+    " const vec2 d = vec2(0.0, 1.0);",
+    " vec2 b = floor(n), f = smoothstep(vec2(0.0), vec2(1.0), fract(n));",
+    " return mix(mix(rand(b), rand(b + d.yx), f.x), mix(rand(b + d.xy), rand(b + d.yy), f.x), f.y);",
+    "}",
+    
     "void main() {",
     "vec4 texHi = texture2D(gradientHi, vTexCoord);",
     "vec4 texLo = texture2D(gradientLo, vTexCoord);",
+    "vec2 noice = vec2(noise(gl_FragCoord.xy), noise(gl_FragCoord.yx));",
     "highp vec4 lum = texHi;",
-    "lum += texLo * (1.0 / 256.0);",
+    
+    "lum += texLo/hw_bitdepth;", //now we need to dither
+    "float pattern_bit_x = mod(vTexCoord.x*512.0, 2.0);",
+    "float pattern_bit_y = mod(vTexCoord.y*512.0 ,2.0);",
+    "float spatial_dither = mod((pattern_bit_x + pattern_bit_y), 2.0);",
+    " /*The lowest bit used for temporal dithering */",
+    
+    "float bit_h = mod(floor(lum.g*hw_bitdepth*2.0),2.0);", //the 9th bit
+    "float bit_l = mod(floor(lum.g*hw_bitdepth*4.0),2.0);", //the 10th bit
+    "lum = floor(lum*hw_bitdepth)/hw_bitdepth;", //round output to max of the HW
+    "//lum += bit_h*((noice.x+noice.y)-0.5)/256.0;", //apply noise to the last bit
+    "//lum += bit_l*(1.0/hw_bitdepth)*mod(flickerCounter,2.0);",
+    "float full_bit = mod(flickerCounter,2.0) * bit_h * bit_l;",
+    "float half_bit =  ceil((mod(flickerCounter + 1.0,2.0) * bit_h) + (mod(flickerCounter,2.0) * mod(bit_h + bit_l, 2.0) ) / 2.0);",
+    "lum.xyz += full_bit/hw_bitdepth + noice.x/hw_bitdepth * half_bit;",
     "gl_FragColor = lum;",
     "}",
   ].join("\n");
@@ -141,6 +173,7 @@ window.VRGradientExperiment = (function () {
     this.texturePerfectLo = texturePerfectLo;
     this.textureQuantisedHi = textureQuantisedHi;
     this.textureQuantisedLo = textureQuantisedLo;
+    this.flickerCounter = 0.0;
 
     this.quantisedPlane = getRandomInt(1,4); //denotes the plane that contains the quantised texture
 
@@ -181,10 +214,10 @@ window.VRGradientExperiment = (function () {
 
     this.planes = []; //contains the index position of the end of the index buffer that the plane occupies 
     this.planes.push(0);
-    this.planes.push(appendPlane(-2, 2, -this.wallDistance, 1.8));
-    this.planes.push(appendPlane(2, 2, -this.wallDistance, 1.8));
-    this.planes.push(appendPlane(-2, -2, -this.wallDistance, 1.8));
-    this.planes.push(appendPlane(2, -2, -this.wallDistance, 1.8));
+    this.planes.push(appendPlane(-1.8, 1.8, -this.wallDistance, 1.7));
+    this.planes.push(appendPlane(1.8, 1.8, -this.wallDistance, 1.7));
+    this.planes.push(appendPlane(-1.8, -1.8, -this.wallDistance, 1.7));
+    this.planes.push(appendPlane(1.8, -1.8, -this.wallDistance, 1.7));
 
     this.indexCount = cubeIndices.length;
   
@@ -202,7 +235,7 @@ window.VRGradientExperiment = (function () {
   }
 
 
-  GradientExperiment.prototype.render = function (projectionMat, modelViewMat, selection, timestamp, stats) {
+  GradientExperiment.prototype.render = function (projectionMat, modelViewMat, selection, flickerCounter, stats) {
     var gl = this.gl;
     var program = this.program;
 
@@ -232,7 +265,8 @@ window.VRGradientExperiment = (function () {
     gl.bindTexture(gl.TEXTURE_2D, this.textureQuantisedHi);
     gl.activeTexture(gl.TEXTURE3); //texture 3 contains the quantised gradient Hi
     gl.bindTexture(gl.TEXTURE_2D, this.textureQuantisedLo);
-
+    //dithering
+    gl.uniform1f(program.uniform.flickerCounter, flickerCounter);
 
     for(var i = 1; i<=4; i++){ //draw each of the four planes
 
@@ -245,7 +279,7 @@ window.VRGradientExperiment = (function () {
         gl.uniform1i(this.program.uniform.gradientLo, 1);
       }
       if(i == selection){
-        mat4.fromScaling(this.heroRotationMat, (0.5 + Math.cos(timestamp)) * [1, 1, 0]);
+        mat4.fromScaling(this.heroRotationMat, (0.5 + Math.cos(0.0)) * [1, 1, 0]);
         mat4.multiply(this.heroModelViewMat, modelViewMat, this.heroRotationMat);
         gl.uniformMatrix4fv(program.uniform.modelViewMat, false, this.heroModelViewMat);
         mat3.fromMat4(this. normalMat, this.heroRotationMat);

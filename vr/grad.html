@@ -128,7 +128,7 @@ found in the LICENSE file.
       var textureLoader = null;
       var splashScreen = null;
       var neutralColour = vec4.fromValues(0, 0, 1, 1);
-
+      var flickerCounter = 0;
       // This sample is going to use a slightly different start up sequence.
       // In order to show the splash screen effect we won't have any magic
       // window content and only begin loading the scene once the "Enter VR"
@@ -188,42 +188,42 @@ found in the LICENSE file.
           connection.onmessage = function (e) {
             selection = null;
             var json = JSON.parse(e.data);
+            console.log(json);
             perfectTextureLocationHi = json.refImage.replace('grad_', 'msb_grad_');
             quantisedTextureLocationHi = json.quantImage.replace('grad_', 'msb_grad_');
             perfectTextureLocationLo = json.refImage.replace('grad_', 'lsb_grad_');
-            quantisedTextureLocationLo = json.quantImage.replace('grad_', 'lsb_grad_');;
+            quantisedTextureLocationLo = json.quantImage.replace('grad_', 'lsb_grad_');
+            textureLoader.loadTexture(quantisedTextureLocationHi, null, function(textureQuantisedHi){
+              textureLoader.loadTexture(quantisedTextureLocationLo, null, function(textureQuantisedLo){
+                textureLoader.loadTexture(perfectTextureLocationHi, null,  function(texturePerfectHi){
+                  textureLoader.loadTexture(perfectTextureLocationLo, null, function(texturePerfectLo){
 
-            console.log(quantisedTextureLocationHi, quantisedTextureLocationLo);
+                    var fb = gl.createFramebuffer();
+                    gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+                    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texturePerfectHi, 0);
+                    console.log(gl.checkFramebufferStatus(gl.FRAMEBUFFER) == gl.FRAMEBUFFER_COMPLETE);
+                    if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) == gl.FRAMEBUFFER_COMPLETE) {
+                      var pixels = new Uint8Array(4);
+                      gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+                      gl.clearColor(pixels[0]/265.0, pixels[1]/265.0, pixels[2]/265.0, pixels[3]/265.0); //set the clear colour to the neutral colour 
 
-            var textureQuantisedHi = textureLoader.loadTexture(quantisedTextureLocationHi);
+                    }
+                    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      					    
+                    gradientExperiment = new VRGradientExperiment(gl, texturePerfectHi, texturePerfectLo, textureQuantisedHi, textureQuantisedLo, 8.5);
+      					    var enablePerformanceMonitoring = WGLUUrl.getBool(
+      					    'enablePerformanceMonitoring', false);
+      					    stats = new WGLUStats(gl, enablePerformanceMonitoring);
+      					    // Once the scene is fully loaded kick off the animation loop
+      					    vrDisplay.requestAnimationFrame(onAnimationFrame);
 
-            var texturePerfectHi = textureLoader.loadTexture(perfectTextureLocationHi);
-            
-            var textureQuantisedLo = textureLoader.loadTexture(quantisedTextureLocationLo);
-
-            var texturePerfectLo = textureLoader.loadTexture(perfectTextureLocationLo);
-
-
+        			    });
+        		    });
+        	    });
+            });
             /*
-            var fb = gl.createFramebuffer();
-            gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
-            gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texturePerfect, 0);
-            console.log(gl.checkFramebufferStatus(gl.FRAMEBUFFER));
-            if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) == gl.FRAMEBUFFER_COMPLETE) {
-              var pixels = new Uint8Array(4);
-              gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-              gl.clearColor(pixels[0]/255.0, pixels[1]/255.0, pixels[2]/255.0, pixels[3]/255.0); //set the clear colour to the neutral colour 
-
-            }
-            gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+            
             */
-            gradientExperiment = new VRGradientExperiment(gl, texturePerfectHi, texturePerfectLo, textureQuantisedHi, textureQuantisedLo, 7.5);
-            var enablePerformanceMonitoring = WGLUUrl.getBool(
-                'enablePerformanceMonitoring', false);
-            stats = new WGLUStats(gl, enablePerformanceMonitoring);
-
-            // Once the scene is fully loaded kick off the animation loop
-            vrDisplay.requestAnimationFrame(onAnimationFrame);
           };
         }, 1000);
       }
@@ -424,21 +424,25 @@ found in the LICENSE file.
         if(selection && !newSelection){ //if they've let go of the selection pad :)
           console.log(selection == gradientExperiment.quantisedPlane);
           connection.send(selection == gradientExperiment.quantisedPlane);
-          return;
-        }
+       	  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+          vrDisplay.submitFrame();
+	        return;
+	}
+
+
 
         selection = newSelection;
         vrDisplay.requestAnimationFrame(onAnimationFrame);
 
         vrDisplay.getFrameData(frameData);
+      	gl.viewport(0, 0, webglCanvas.width * 0.5, webglCanvas.height);
+      	gradientExperiment.render(frameData.leftProjectionMatrix, frameData.leftViewMatrix, selection, flickerCounter);
 
-        gl.viewport(0, 0, webglCanvas.width * 0.5, webglCanvas.height);
-        gradientExperiment.render(frameData.leftProjectionMatrix, frameData.leftViewMatrix, selection, t);
+      	gl.viewport(webglCanvas.width * 0.5, 0, webglCanvas.width * 0.5, webglCanvas.height);
 
-        gl.viewport(webglCanvas.width * 0.5, 0, webglCanvas.width * 0.5, webglCanvas.height);
-        gradientExperiment.render(frameData.rightProjectionMatrix, frameData.rightViewMatrix, selection, t);
-
+      	gradientExperiment.render(frameData.rightProjectionMatrix, frameData.rightViewMatrix, selection, flickerCounter);
         vrDisplay.submitFrame();
+        flickerCounter++;
 
         stats.end();
       }
