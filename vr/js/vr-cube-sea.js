@@ -58,22 +58,23 @@ window.VRGradientExperiment = (function () {
     "vec4 texHi = texture2D(gradientHi, vTexCoord);",
     "vec4 texLo = texture2D(gradientLo, vTexCoord);",
     "vec2 noice = vec2(noise(gl_FragCoord.xy), noise(gl_FragCoord.yx));",
-    "highp vec4 lum = texHi;",
+    "highp vec4 lum = texHi*(255.0/256.0);",
     
     "lum += texLo/hw_bitdepth;", //now we need to dither
-    "float pattern_bit_x = mod(vTexCoord.x*512.0, 2.0);",
-    "float pattern_bit_y = mod(vTexCoord.y*512.0 ,2.0);",
+    "float pattern_bit_x = mod(gl_FragCoord.x, 2.0);",
+    "float pattern_bit_y = mod(gl_FragCoord.y, 2.0);",
     "float spatial_dither = mod((pattern_bit_x + pattern_bit_y), 2.0);",
     " /*The lowest bit used for temporal dithering */",
     
     "float bit_h = mod(floor(lum.g*hw_bitdepth*2.0),2.0);", //the 9th bit
     "float bit_l = mod(floor(lum.g*hw_bitdepth*4.0),2.0);", //the 10th bit
     "lum = floor(lum*hw_bitdepth)/hw_bitdepth;", //round output to max of the HW
+    "//lum = vec4(mix(0.0, 0.3, vTexCoord.x*vTexCoord.y));",
     "//lum += bit_h*((noice.x+noice.y)-0.5)/256.0;", //apply noise to the last bit
     "//lum += bit_l*(1.0/hw_bitdepth)*mod(flickerCounter,2.0);",
     "float full_bit = mod(flickerCounter,2.0) * bit_h * bit_l;",
-    "float half_bit =  ceil((mod(flickerCounter + 1.0,2.0) * bit_h) + (mod(flickerCounter,2.0) * mod(bit_h + bit_l, 2.0) ) / 2.0);",
-    "lum.xyz += full_bit/hw_bitdepth + noice.x/hw_bitdepth * half_bit;",
+    "float half_bit = ceil((mod(flickerCounter + 1.0,2.0) * bit_h) + (mod(flickerCounter,2.0) * mod(bit_h + bit_l, 2.0) ) / 2.0);",
+    "lum.xyz += vec3(full_bit/hw_bitdepth + spatial_dither * half_bit/hw_bitdepth);",
     "gl_FragColor = lum;",
     "}",
   ].join("\n");
